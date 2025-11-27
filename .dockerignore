@@ -1,0 +1,71 @@
+# Ignorar el propio Dockerfile y archivos de docker-compose.
+# Generalmente no los necesitas dentro de la imagen.
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+
+# Ignorar el directorio de control de versiones de Git.
+# Contiene todo el historial del repositorio, es pesado e innecesario.
+.git
+.gitignore
+.gitattributes
+
+# Ignorar el archivo .dockerignore para que no se copie a sí mismo.
+.dockerignore
+
+# Dependencias del proyecto que deben ser instaladas DENTRO del contenedor.
+# Copiarlas desde tu máquina local puede causar problemas de compatibilidad.
+node_modules
+vendor/
+target/
+dist/
+build/
+
+# Archivos de configuración de Entornos de Desarrollo (IDEs) y editores.
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de sistema operativo.
+# Creados por macOS, Windows y Linux, no tienen utilidad en el contenedor.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de logs. La aplicación generará los suyos propios dentro del contenedor.
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de entorno y variables locales.
+# ¡MUY IMPORTANTE! Nunca incluyas secretos en la imagen.
+# Estos deben ser gestionados con variables de entorno en tiempo de ejecución.
+.env
+.env.local
+.env.*.local
+
+# Directorios de tests. No son necesarios en una imagen de producción.
+tests/
+spec/
+coverage/
+
+# Documentación. Generalmente no es necesaria en la imagen final.
+README.md
+LICENSE
+docs/
+
+# Archivos temporales y de caché específicos de algunos lenguajes/frameworks.
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Archivos del Maven Wrapper. No son necesarios en la imagen.
+.mvn/
+mvnw
+mvnw.cmd

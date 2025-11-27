@@ -8,6 +8,7 @@ import com.jhair.exchangerate.dto.request.CreateRateRequestDTO;
 import com.jhair.exchangerate.dto.request.PatchRateRequestDTO;
 import com.jhair.exchangerate.dto.request.UpdateRateRequestDTO;
 import com.jhair.exchangerate.dto.response.RateResponseDTO;
+import com.jhair.exchangerate.exception.ResourceNotFoundException;
 import com.jhair.exchangerate.external.client.CurrencyApiClient;
 import com.jhair.exchangerate.external.mapper.CurrencyApiMapper;
 import com.jhair.exchangerate.mapper.RateMapper;
@@ -34,7 +35,7 @@ public class RateService {
 
     public Mono<RateResponseDTO> getById(UUID id) {
         return rateRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("No se encontró el Id : " + id)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No se encontró el Id : " + id)))
                 .map(mapper::toDto);
     }
 
@@ -48,7 +49,7 @@ public class RateService {
         return currencyApiClient.fetchExternalRate(originCurrency, finalCurrency)
                 .flatMap(foundApiRespondDto -> 
                     Mono.justOrEmpty(foundApiRespondDto.rates().get(finalCurrency))
-                        .switchIfEmpty(Mono.error(new RuntimeException("No se encontró el tipo de cambio")))
+                        .switchIfEmpty(Mono.error(new ResourceNotFoundException("No se encontró el tipo de cambio")))
                         .flatMap(foundRate -> {
                             Rate newRate = currencyApiMapper.toEntity(foundApiRespondDto, originCurrency, finalCurrency, foundRate);
                             return rateRepository.save(newRate);
@@ -64,7 +65,7 @@ public class RateService {
 
     public Mono<RateResponseDTO> update(UUID id, UpdateRateRequestDTO dto) {
         return rateRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("No se encontró el Id : " + id)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No se encontró el Id : " + id)))
                 .flatMap(foundRate -> {
                     mapper.updateFromDto(dto, foundRate);
                     return rateRepository.save(foundRate);
@@ -74,7 +75,7 @@ public class RateService {
 
     public Mono<RateResponseDTO> patch(UUID id, PatchRateRequestDTO dto) {
         return rateRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("No se encontró el Id : " + id)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No se encontró el Id : " + id)))
                 .flatMap(foundRate -> {
                     mapper.patchFromDto(dto, foundRate);
                     return rateRepository.save(foundRate);
@@ -84,7 +85,7 @@ public class RateService {
 
     public Mono<Void> delete(UUID id) {
         return rateRepository.findById(id)
-                .switchIfEmpty(Mono.error(new RuntimeException("No se encontró el Id : " + id)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No se encontró el Id : " + id)))
                 .flatMap(rateRepository::delete);
     }
 

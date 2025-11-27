@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación Spring Boot
+  app:
+    # Construye la imagen a partir del Dockerfile en el directorio actual (.)
+    build: .
+    container_name: mi-app-contenedor
+    # Mapea el puerto 1010 de la máquina host al puerto 7070 del contenedor
+    ports:
+      - "7070:7070"
+    # Conecta este servicio a la red 'mi-red-app'
+    networks:
+      - mi-red-app
+    # Hace que este servicio espere a que el servicio 'db' esté listo antes de iniciar
+    depends_on:
+      - db
+
+  # Servicio de la base de datos PostgreSQL
+  db:
+    image: postgres:18.1
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: mydbreact
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jhair
+    volumes:
+      # Persiste los datos de la base de datos en un volumen nombrado
+      - pgdata:/var/lib/postgresql
+    networks:
+      - mi-red-app
+
+# Define la red personalizada para la comunicación entre contenedores
+networks:
+  mi-red-app:
+    driver: bridge
+
+# Define el volumen nombrado para persistir los datos de la base de datos
+volumes:
+  pgdata:
