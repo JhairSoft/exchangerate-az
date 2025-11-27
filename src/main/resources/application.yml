@@ -1,0 +1,17 @@
+spring:
+    application:
+        name: exchangerate
+    r2dbc:
+        url: r2dbc:postgresql://localhost:5432/mydbreact
+        username: postgres
+        password: jhair
+    sql:
+        init:
+            mode: never
+
+external:
+    api:
+        url: http://localhost:8080/fixer/latest
+
+server:
+  port: 7070
