@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
-public record ApiCurrencyResponseDTO(
+public record CurrencyApiResponseDTO(
         boolean success,
         Long timestamp,
         String base,

@@ -41,6 +41,11 @@ public class RateController {
         return rateService.getById(id);
     }
 
+    @GetMapping("find")
+    public Mono<RateResponseDTO> getExchangeRate(String originCurrency, String finalCurrency){
+        return rateService.getExchangeRate(originCurrency, finalCurrency);
+    }
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Mono<RateResponseDTO> create(@RequestBody CreateRateRequestDTO dto) {
