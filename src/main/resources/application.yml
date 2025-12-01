@@ -2,18 +2,22 @@ spring:
     application:
         name: exchangerate
     r2dbc:
-        # url: r2dbc:postgresql://localhost:5432/mydbreact
-        url: r2dbc:postgresql://db:5432/mydbreact
+        url: r2dbc:postgresql://localhost:5432/mydbreact # local
+        # url: r2dbc:postgresql://db:5432/mydbreact # docker-compose
         username: postgres
         password: jhair
     sql:
         init:
-            mode: always
+            mode: never
+    flyway:
+        url: jdbc:postgresql://localhost:5432/mydbreact
+        user: postgres
+        password: jhair
 
 external:
     api:
-        # url: http://localhost:8080/fixer/latest
-        url: http://host.docker.internal:8080/fixer/latest
+        url: http://localhost:8080/fixer/latest #local
+        # url: http://host.docker.internal:8080/fixer/latest # docker-compose
 
 server:
   port: 7070
