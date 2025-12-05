@@ -13,6 +13,23 @@ services:
     # Hace que este servicio espere a que el servicio 'db' esté listo antes de iniciar
     depends_on:
       - db
+    # Inyección de variables para conectar con el servicio 'db' en lugar de localhost
+    environment:
+      # Conexión Reactiva (R2DBC)
+      - DB_R2DBC_URL=r2dbc:postgresql://db:5432/mydbreact
+      
+      # Conexión JDBC (Flyway)
+      - DB_FLYWAY_URL=jdbc:postgresql://db:5432/mydbreact
+      
+      # Credenciales de base de datos
+      - DB_USER=postgres
+      - DB_PASS=jhair
+
+      # Modo de inicializacion (actualmente lo inicializa Flayway) se desactiva por seguridad
+      - DB_MODE=never
+      
+      # Conexión a API externa (host.docker.internal permite salir a tu PC)
+      - EXTERNAL_API_URL=http://host.docker.internal:8080/fixer/latest
 
   # Servicio de la base de datos PostgreSQL
   db:

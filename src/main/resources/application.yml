@@ -1,23 +1,30 @@
 spring:
     application:
         name: exchangerate
+
+    # 1. Configuración Reactiva (R2DBC) - Usada por tu App
     r2dbc:
-        url: r2dbc:postgresql://localhost:5432/mydbreact # local
-        # url: r2dbc:postgresql://db:5432/mydbreact # docker-compose
-        username: postgres
-        password: jhair
+        # Busca la variable de entorno, si no existe, usa localhost (IDE)
+        url: ${DB_R2DBC_URL:r2dbc:postgresql://localhost:5432/mydbreact}
+        username: ${DB_USER:postgres}
+        password: ${DB_PASS:jhair}
+
+    # 2. Configuración Síncrona (JDBC) - Usada EXCLUSIVAMENTE por Flyway
+    flyway:
+        url: ${DB_FLYWAY_URL:jdbc:postgresql://localhost:5432/mydbreact}
+        user: ${DB_USER:postgres}
+        password: ${DB_PASS:jhair}
+
+    # 3. Desactivamos el inicializador SQL nativo de Spring
     sql:
         init:
-            mode: never
-    flyway:
-        url: jdbc:postgresql://localhost:5432/mydbreact
-        user: postgres
-        password: jhair
-
+            mode: ${DB_MODE:never}
+            
 external:
     api:
-        url: http://localhost:8080/fixer/latest #local
-        # url: http://host.docker.internal:8080/fixer/latest # docker-compose
+        # URL de tu servicio externo
+        # En local usa localhost. En Docker/Azure se inyectará el valor correcto.
+        url: ${EXTERNAL_API_URL:http://localhost:8080/fixer/latest}
 
 server:
-  port: 7070
+  port: ${SERVER_PORT:7070}
