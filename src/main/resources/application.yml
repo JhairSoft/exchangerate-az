@@ -14,6 +14,7 @@ spring:
         url: ${DB_FLYWAY_URL:jdbc:postgresql://localhost:5432/mydbreact}
         user: ${DB_USER:postgres}
         password: ${DB_PASS:jhair}
+        baseline-on-migrate: true
 
     # 3. Desactivamos el inicializador SQL nativo de Spring
     sql:
